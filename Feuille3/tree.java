@@ -7,6 +7,9 @@ public class tree {
             System.out.println("Renseignez une taille pour le sapin !");
             System.exit(0);
 
+        } else if (Integer.parseInt(args[0]) == 0) {
+            System.out.println("La taille ne peut pas être égale à 0 !");
+            System.exit(0);
         }
         // DERNIER NIVEAU 7, 13, 21, 31
         // BASES 1, 5, 11, 17, 25
