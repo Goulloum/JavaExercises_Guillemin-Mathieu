@@ -6,7 +6,7 @@ public class Game {
     private Integer[][] board = { { null, null, null }, { null, null, null }, { null, null, null } };
     private Boolean isPlayerTurn = true;
 
-    public Integer[] getRandomNextMove() {
+    public Integer[] playRandomNextMove() {
         Random ran = new Random();
         Integer randomX = ran.nextInt(3);
         Integer randomY = ran.nextInt(3);
@@ -14,27 +14,9 @@ public class Game {
             randomX = ran.nextInt(3);
             randomY = ran.nextInt(3);
         }
-        Integer[] computerCoodinates = { randomX, randomY };
-        return computerCoodinates;
-
-    }
-
-    public void printBoardView() {
-        System.out.println("-------------");
-
-        for (int i = 0; i < 3; i++) {
-            String line = "| ";
-            for (int j = 0; j < 3; j++) {
-                if (this.board[i][j] == null) {
-                    line += "  | ";
-                    continue;
-                }
-                line += (this.board[i][j] == 1) ? "X | " : "O | ";
-            }
-            System.out.println(line);
-            System.out.println("-------------");
-
-        }
+        this.board[randomX][randomY] = (isPlayerTurn) ? 1 : 2;
+        this.isPlayerTurn = !this.isPlayerTurn;
+        return new Integer[] { randomX, randomY };
 
     }
 
@@ -108,6 +90,15 @@ public class Game {
 
     public void setIsPlayerTurn(Boolean _isPlayerTurn) {
         this.isPlayerTurn = _isPlayerTurn;
+    }
+
+    public void restart() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                this.board[i][j] = null;
+            }
+        }
+        this.isPlayerTurn = true;
     }
 
 }
