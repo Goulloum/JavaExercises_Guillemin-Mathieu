@@ -27,7 +27,7 @@ public class exercice3 {
 
         Integer result = 0;
         for (int i = 0; i < str.length(); i++) {
-            if (vowels.indexOf(str.charAt(i)) != -1) {
+            if (vowels.indexOf(str.toLowerCase().charAt(i)) != -1) {
                 result++;
             }
         }
