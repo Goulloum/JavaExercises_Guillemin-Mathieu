@@ -1,5 +1,6 @@
 package Bonus.morpion;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class Game {
@@ -106,26 +107,29 @@ public class Game {
     }
 
     // Minmax implementation
-    public Integer minmax(Integer[][] board, Integer depth, Boolean isMax) {
+    public Float minmax(Integer[][] board, Integer depth, Boolean isMax) {
         int score = this.evaluate(board);
+        float coef = (float) 1 / depth;
         // If Maximizer has won the game
         // return his/her evaluated score
-        if (score == 10)
-            return score * (1 / depth);
-
+        if (score == 10) {
+            return score * coef;
+        }
         // If Minimizer has won the game
         // return his/her evaluated score
-        if (score == -10)
-            return score * (1 / depth);
+        if (score == -10) {
+
+            return score * coef;
+        }
 
         // If there are no more moves and
         // no winner then it is a tie
         if (score == 0)
-            return score;
+            return (float) score;
 
         // If this maximizer's move
         if (isMax) {
-            int best = -1000;
+            float best = 1000;
 
             // Traverse all cells
             for (int i = 0; i < 3; i++) {
@@ -133,11 +137,11 @@ public class Game {
                     // Check if cell is empty
                     if (board[i][j] == null) {
                         // Make the move
-                        board[i][j] = 1;
+                        board[i][j] = 2;
 
                         // Call minimax recursively and choose
                         // the maximum value
-                        best = Math.max(best, minmax(board,
+                        best = Math.min(best, minmax(board,
                                 depth + 1, !isMax));
 
                         // Undo the move
@@ -150,7 +154,7 @@ public class Game {
 
         // If this minimizer's move
         else {
-            int best = 1000;
+            float best = -1000;
 
             // Traverse all cells
             for (int i = 0; i < 3; i++) {
@@ -158,11 +162,11 @@ public class Game {
                     // Check if cell is empty
                     if (board[i][j] == null) {
                         // Make the move
-                        board[i][j] = 2;
+                        board[i][j] = 1;
 
                         // Call minimax recursively and choose
                         // the minimum value
-                        best = Math.min(best, minmax(board,
+                        best = Math.max(best, minmax(board,
                                 depth + 1, !isMax));
 
                         // Undo the move
@@ -175,7 +179,7 @@ public class Game {
     }
 
     public Integer[] playBestMove(Integer[][] board) {
-        int bestVal = -1000;
+        float bestVal = 1000;
         Integer[] bestMove = { -1, -1 };
 
         // Traverse all cells, evaluate minimax function
@@ -186,18 +190,19 @@ public class Game {
                 // Check if cell is empty
                 if (board[i][j] == null) {
                     // Make the move
-                    board[i][j] = 1;
+                    board[i][j] = 2;
 
                     // compute evaluation function for this
                     // move.
-                    int moveVal = minmax(board, 1, true);
-
+                    float moveVal = minmax(board, 1, false);
+                    System.out.println(Arrays.deepToString(board));
+                    System.out.println(moveVal);
                     // Undo the move
                     board[i][j] = null;
                     // If the value of the current move is
                     // more than the best value, then update
                     // best/
-                    if (moveVal > bestVal) {
+                    if (moveVal < bestVal) {
                         bestMove[0] = i;
                         bestMove[1] = j;
                         bestVal = moveVal;
@@ -205,7 +210,7 @@ public class Game {
                 }
             }
         }
-
+        System.out.println("best move :" + bestVal);
         this.board[bestMove[0]][bestMove[1]] = 2;
         this.isPlayerTurn = !this.isPlayerTurn;
         return bestMove;
