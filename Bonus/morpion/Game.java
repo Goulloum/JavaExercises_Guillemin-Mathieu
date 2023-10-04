@@ -194,7 +194,6 @@ public class Game {
 
                     // Undo the move
                     board[i][j] = null;
-                    System.out.println(moveVal);
                     // If the value of the current move is
                     // more than the best value, then update
                     // best/
@@ -207,8 +206,6 @@ public class Game {
             }
         }
 
-        System.out.printf("The value of the best Move " +
-                "is : %d\n\n", bestVal);
         this.board[bestMove[0]][bestMove[1]] = 2;
         this.isPlayerTurn = !this.isPlayerTurn;
         return bestMove;
