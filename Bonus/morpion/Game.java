@@ -20,46 +20,46 @@ public class Game {
 
     }
 
-    public Integer evaluate() {
+    public Integer evaluate(Integer[][] board) {
 
         for (int i = 0; i < 3; i++) {
             // Check for winning lines
 
-            if (this.board[i][0] == this.board[i][1] && this.board[i][1] == this.board[i][2]) {
-                if (this.board[i][0] != null) {
-                    if (this.board[i][0] == 1) {
+            if (board[i][0] == board[i][1] && board[i][1] == board[i][2]) {
+                if (board[i][0] != null) {
+                    if (board[i][0] == 1) {
                         return 10;
-                    } else if (this.board[i][0] == 2) {
+                    } else if (board[i][0] == 2) {
                         return -10;
                     }
                 }
 
             }
             // Check for winning columns
-            if (this.board[0][i] == this.board[1][i] && this.board[1][i] == this.board[2][i]) {
-                if (this.board[0][i] != null) {
-                    if (this.board[0][i] == 1) {
+            if (board[0][i] == board[1][i] && board[1][i] == board[2][i]) {
+                if (board[0][i] != null) {
+                    if (board[0][i] == 1) {
                         return 10;
-                    } else if (this.board[0][i] == 2) {
+                    } else if (board[0][i] == 2) {
                         return -10;
                     }
                 }
             }
         }
         // Check for wiining diagonals
-        if (this.board[0][0] == this.board[1][1] && this.board[1][1] == this.board[2][2]) {
-            if (this.board[0][0] != null) {
-                if (this.board[0][0] == 1) {
+        if (board[0][0] == board[1][1] && board[1][1] == board[2][2]) {
+            if (board[0][0] != null) {
+                if (board[0][0] == 1) {
                     return 10;
-                } else if (this.board[0][0] == 2) {
+                } else if (board[0][0] == 2) {
                     return -10;
                 }
             }
-        } else if (this.board[0][2] == this.board[1][1] && this.board[1][1] == this.board[2][0]) {
-            if (this.board[0][2] != null) {
-                if (this.board[0][2] == 1) {
+        } else if (board[0][2] == board[1][1] && board[1][1] == board[2][0]) {
+            if (board[0][2] != null) {
+                if (board[0][2] == 1) {
                     return 10;
-                } else if (this.board[0][2] == 2) {
+                } else if (board[0][2] == 2) {
                     return -10;
                 }
             }
@@ -67,7 +67,7 @@ public class Game {
         // Check if space remaning
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                if (this.board[i][j] == null) {
+                if (board[i][j] == null) {
                     return -1;
                 }
             }
@@ -99,6 +99,119 @@ public class Game {
             }
         }
         this.isPlayerTurn = true;
+    }
+
+    public Integer[][] getBoard() {
+        return this.board;
+    }
+
+    // Minmax implementation
+    public Integer minmax(Integer[][] board, Integer depth, Boolean isMax) {
+        int score = this.evaluate(board);
+        // If Maximizer has won the game
+        // return his/her evaluated score
+        if (score == 10)
+            return score * (1 / depth);
+
+        // If Minimizer has won the game
+        // return his/her evaluated score
+        if (score == -10)
+            return score * (1 / depth);
+
+        // If there are no more moves and
+        // no winner then it is a tie
+        if (score == 0)
+            return score;
+
+        // If this maximizer's move
+        if (isMax) {
+            int best = -1000;
+
+            // Traverse all cells
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    // Check if cell is empty
+                    if (board[i][j] == null) {
+                        // Make the move
+                        board[i][j] = 1;
+
+                        // Call minimax recursively and choose
+                        // the maximum value
+                        best = Math.max(best, minmax(board,
+                                depth + 1, !isMax));
+
+                        // Undo the move
+                        board[i][j] = null;
+                    }
+                }
+            }
+            return best;
+        }
+
+        // If this minimizer's move
+        else {
+            int best = 1000;
+
+            // Traverse all cells
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    // Check if cell is empty
+                    if (board[i][j] == null) {
+                        // Make the move
+                        board[i][j] = 2;
+
+                        // Call minimax recursively and choose
+                        // the minimum value
+                        best = Math.min(best, minmax(board,
+                                depth + 1, !isMax));
+
+                        // Undo the move
+                        board[i][j] = null;
+                    }
+                }
+            }
+            return best;
+        }
+    }
+
+    public Integer[] playBestMove(Integer[][] board) {
+        int bestVal = -1000;
+        Integer[] bestMove = { -1, -1 };
+
+        // Traverse all cells, evaluate minimax function
+        // for all empty cells. And return the cell
+        // with optimal value.
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                // Check if cell is empty
+                if (board[i][j] == null) {
+                    // Make the move
+                    board[i][j] = 1;
+
+                    // compute evaluation function for this
+                    // move.
+                    int moveVal = minmax(board, 1, true);
+
+                    // Undo the move
+                    board[i][j] = null;
+                    System.out.println(moveVal);
+                    // If the value of the current move is
+                    // more than the best value, then update
+                    // best/
+                    if (moveVal > bestVal) {
+                        bestMove[0] = i;
+                        bestMove[1] = j;
+                        bestVal = moveVal;
+                    }
+                }
+            }
+        }
+
+        System.out.printf("The value of the best Move " +
+                "is : %d\n\n", bestVal);
+        this.board[bestMove[0]][bestMove[1]] = 2;
+        this.isPlayerTurn = !this.isPlayerTurn;
+        return bestMove;
     }
 
 }

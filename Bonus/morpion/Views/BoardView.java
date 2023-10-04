@@ -109,8 +109,8 @@ public abstract class BoardView extends JFrame implements ActionListener {
                     }
                 }
             }
-            if (this.game.evaluate() == -1) {
-                Integer[] computerCoordinates = this.game.playRandomNextMove();
+            if (this.game.evaluate(this.game.getBoard()) == -1) {
+                Integer[] computerCoordinates = this.game.playBestMove(this.game.getBoard());
                 this.game.setBoardSlot(computerCoordinates[0], computerCoordinates[1], 2);
                 this.gridButtons[computerCoordinates[0] * 3 + computerCoordinates[1]]
                         .setForeground(new Color(0, 188, 255));
@@ -119,7 +119,7 @@ public abstract class BoardView extends JFrame implements ActionListener {
             }
         }
 
-        Integer eval = this.game.evaluate();
+        Integer eval = this.game.evaluate(this.game.getBoard());
         switch (eval) {
             case 10:
                 xWins();
