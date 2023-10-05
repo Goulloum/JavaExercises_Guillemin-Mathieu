@@ -25,4 +25,8 @@ public class GenerateArray {
         return list;
     }
 
+    public static void addItem(int item) {
+        list.add(item);
+    }
+
 }
