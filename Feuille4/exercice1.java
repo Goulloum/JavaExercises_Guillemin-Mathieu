@@ -34,7 +34,7 @@ public class exercice1 {
                         System.out.println("Veuillez rentrer des coordonnées entre 1 et 3 compris !");
                     }
                     // Check if coordinates are empty
-                    if (board[Integer.parseInt(moveCoordinates[0])][Integer.parseInt(moveCoordinates[1])] != null) {
+                    if (board[moveCoordinatesInt[0]][moveCoordinatesInt[1]] != null) {
                         System.out.println("La case est déjà occupée !");
                         continue;
                     }
@@ -45,6 +45,7 @@ public class exercice1 {
                     isPlayerTurn = !isPlayerTurn;
                     printBoardView(board);
                 } catch (Exception e) {
+                    System.out.println(e.getMessage());
                     System.out.println("Veuillez rentrer des coordonnées sous forme d'entier (ex: 1 0)");
                     continue;
                 }
