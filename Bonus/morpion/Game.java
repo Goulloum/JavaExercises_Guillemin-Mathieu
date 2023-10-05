@@ -195,8 +195,7 @@ public class Game {
                     // compute evaluation function for this
                     // move.
                     float moveVal = minmax(board, 1, false);
-                    System.out.println(Arrays.deepToString(board));
-                    System.out.println(moveVal);
+
                     // Undo the move
                     board[i][j] = null;
                     // If the value of the current move is
@@ -210,7 +209,6 @@ public class Game {
                 }
             }
         }
-        System.out.println("best move :" + bestVal);
         this.board[bestMove[0]][bestMove[1]] = 2;
         this.isPlayerTurn = !this.isPlayerTurn;
         return bestMove;
