@@ -21,6 +21,7 @@ public class exercice3 {
                 System.out.println("La donnée saisie n'est pas un entier valide ! Recommencez :");
             }
         }
+        scan.close();
 
         ArrayList<Integer> list = GenerateArray.getList();
         System.out.println(list);
